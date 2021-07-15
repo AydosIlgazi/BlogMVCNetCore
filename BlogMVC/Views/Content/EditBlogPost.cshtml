@@ -1,0 +1,107 @@
+﻿@model BlogMVC.Models.BlogPost
+@{
+    var categories = ViewBag.CategoryList;
+}
+
+
+<form method="post" class="w-100" asp-action="EditBlogPost">
+    <input asp-for="Id" hidden />
+    <div class="border p-3">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group row">
+            <h2 class="text-info pl-3">Add Blog Post</h2>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Title"></label>
+            </div>
+            <div class="col-9">
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Description"></label>
+            </div>
+            <div class="col-9 ">
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="CategoryId"></label>
+            </div>
+            <div class="col-5 ">
+                <select asp-for="CategoryId">
+                    @foreach (var category in categories)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+            <div class="col-2">
+                <a asp-action="AddCategory" class="button btn-info w-100" style="background-color: #17a2b8;">Add Category</a>
+            </div>
+            <div class="col-2">
+                <a asp-action="Categories" class="button btn-warning w-100" style="background-color: #ffc107;">Edit Category</a>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Content"></label>
+            </div>
+            <div class="col-9">
+                <textarea asp-for="Content" name="Content" class="form-control"></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="HomePageContent"></label>
+            </div>
+            <div class="col-9">
+                <textarea asp-for="HomePageContent" name="HomePageContent" class="form-control"></textarea>
+                <span asp-validation-for="HomePageContent" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+
+
+            <div class="col-4 offset-2">
+                <input type="submit" class="btn-info w-100" value="Update" style="background-color: #17a2b8;" />
+            </div>
+            <div class="col-4 ">
+                <a asp-action="Index" class="button btn-success  w-100" style="background-color: #28a745;"><i class="fas fa-sign-out-alt"></i> Back</a>
+            </div>
+
+        </div>
+    </div>
+
+
+</form>
+
+
+
+@section scripts{
+
+    <script src="~/ckeditor/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('Content', {
+            filebrowserImageUploadUrl: '/Content/UploadImage'
+        });
+        CKEDITOR.replace('HomePageContent', {
+            filebrowserImageUploadUrl: '/Content/UploadImage',
+            height: '20vh'
+        });
+    </script>
+
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

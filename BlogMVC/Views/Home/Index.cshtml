@@ -1,0 +1,103 @@
+﻿@model List<BlogMVC.Models.BlogPost>
+@using System.Text.RegularExpressions
+@{
+    var categories = ViewBag.CategoryList;
+}
+
+
+<!-- Menu -->
+<section id="menu">
+
+    <!-- Search -->
+    <partial name="_MenuSearch" />
+
+    <!-- Links -->
+    <partial name="_MenuLinks" />
+
+    <!-- Actions -->
+    <partial name="_MenuActions" />
+
+</section>
+
+<!-- Main -->
+<div id="main">
+
+    @foreach (BlogPost blogPost in Model)
+    {
+        <article class="post">
+            <header>
+                <div class="title">
+                    <h2><a href="single.html">@blogPost.Title</a></h2>
+                    <p>@blogPost.Description</p>
+                </div>
+                <div class="meta">
+                    <time class="published">@blogPost.PostDate.ToString("dd/MM/yyyy")</time>
+                    <a href="#" class="author"><span class="name">Jane Doe</span><img src="images/avatar.jpg" alt="" /></a>
+                </div>
+            </header>
+
+            <p>@Html.Raw(blogPost.HomePageContent)</p>
+            <footer>
+                <ul class="actions">
+                    <li><a asp-controller="Blog" asp-action="Index" asp-route-title="@Regex.Replace(blogPost.Title, @"[^A-Za-z0-9_\.~]+", "-").ToLower()" asp-route-id="@blogPost.Id" class="button large">Continue Reading</a></li>
+                </ul>
+                <ul class="stats">
+                    <li><a href="#">General</a></li>
+                    <li><a href="#" class="icon solid fa-heart">28</a></li>
+                    <li><a href="#" class="icon solid fa-comment">128</a></li>
+                </ul>
+            </footer>
+        </article>
+    }
+
+
+    <!-- Pagination -->
+    <ul class="actions pagination">
+        <li><a href="" class="disabled button large previous">Previous Page</a></li>
+        <li><a href="#" class="button large next">Next Page</a></li>
+    </ul>
+
+</div>
+
+<!-- Sidebar -->
+<section id="sidebar">
+
+    <!-- Intro -->
+    <partial name="_SideBarIntro" />
+
+    <!-- Mini Posts -->
+    <section>
+        <div class="mini-posts">
+
+            @foreach (Category category in categories)
+            {
+                <!-- Mini Post -->
+                <article class="mini-post">
+                    <header>
+                        <h3><a  asp-action="Category" asp-route-categoryId="@category.Id">@category.Name</a></h3>
+                        <time class="published">@category.Description</time>
+                    </header>
+                    <a asp-action="Category" asp-route-categoryId="@category.Id" class="image">
+                        @if (category.Image != null)
+                        {
+                            <img src="data:image;base64,@System.Convert.ToBase64String(category.Image)" alt="" />
+                        }
+
+                    </a>
+                </article>
+            }
+
+
+        </div>
+    </section>
+
+    <!-- Posts List -->
+    <partial name="_SideBarPostsList" />
+
+    <!-- About -->
+    <partial name="_SideBarAbout" />
+
+    <!-- Footer -->
+    <partial name="_SideBarFooter" />
+
+</section>
